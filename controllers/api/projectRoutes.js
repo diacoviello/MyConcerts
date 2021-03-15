@@ -2,6 +2,15 @@ const router = require('express').Router();
 const { Project } = require('../../models');
 const withAuth = require('../../utils/auth');
 
+router.get('/', async (req, res) => {
+  try {
+    const artistData = await Artist.findAll();
+    res.status(200).json(artistData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.post('/', withAuth, async (req, res) => {
   try {
     const newProject = await Project.create({
