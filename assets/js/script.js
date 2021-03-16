@@ -1,4 +1,4 @@
-var joeKey = config.JOE_KEY;
+var BITKey = config.BIT_KEY;
 var myKey = config.MY_KEY;
 var resultTextEl = document.querySelector("#result-text");
 var resultContentEl = document.querySelector("#result-content");
@@ -119,7 +119,7 @@ function searchApi(query) {
 
   var locQueryUrl = "https://rest.bandsintown.com/v4/artists/";
 
-  locQueryUrl = locQueryUrl + query + "/events/?app_id=" + joeKey;
+  locQueryUrl = locQueryUrl + query + "/events/?app_id=" + BITKey;
 
   fetch(locQueryUrl)
     .then(function (response) {
