@@ -88,8 +88,6 @@ function printResults(resultObj) {
   directionsBtn.classList.add("btn", "btn-dark");
   directionsBtn.setAttribute("target", "_blank");
 
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl, directionsBtn);
-
   resultContentEl.append(resultCard);
   console.log(resultObj.venue.longitude);
 
@@ -112,7 +110,26 @@ function printResults(resultObj) {
       "_blank"
     );
   }
-}
+
+  var rsvpBtn = document.createElement("a");
+  rsvpBtn.textContent = "~*~ RSVP ~*~";
+  //send event information to user's database
+  // rsvpBtn.setAttribute("href", resultObj.url);
+  rsvpBtn.classList.add("btn", "btn-dark");
+
+  resultBody.append(
+    titleEl,
+    bodyContentEl,
+    linkButtonEl,
+    directionsBtn,
+    rsvpBtn
+  );
+};
+
+function loginRegisterReturn() {
+  alert("You must be logged in to do that");
+
+} 
 
 function searchApi(query) {
   artistCard.innerHTML = "";
