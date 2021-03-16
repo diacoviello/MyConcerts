@@ -1,68 +1,78 @@
-const router = require("express").Router();
-const { User } = require("../../models");
+const router = require('express').Router();
+const { Event } = require('../../models/');
+const withAuth = require('../../utils/auth');
 
-router.post("/", async (req, res) => {
+router.post('/',  withAuth,  async (req, res) => {
+  const body = req.body;
+
   try {
-    const newUser = await User.create({
-      // TODO: SET USERNAME TO USERNAME SENT IN REQUEST
-      // TOD: SET PASSWORD TO PASSWORD SENT IN REQUEST
+    const newPost = await Event.create({
+      // TODO: POST BODY SENT IN REQUEST. HINT USING SPREAD
+      ...req.body,
+      user_id: req.session.user_id,
+      // TODO: SET USERID TO LOGGEDIN USERID
+
     });
-
-    req.session.save(() => {
-      // TODO: SET USERID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
-
-      // TODO: SET USERNAME IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
-
-      // TODO: SET LOGGEDIN TO TRUE IN REQUEST SESSION
-
-      res.json(newUser);
-    });
+    res.json(newPost);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.post("/login", async (req, res) => {
+router.get('/',  withAuth, async (req, res) => {
+    // find all categories
+    // be sure to include its associated Products
+    try {
+      const eventData = await Event.findAll({
+        // JOIN with travellers, using the Trip through table
+        
+      });
+  
+      if (!eventData) {
+        res.status(404).json({ message: 'No category found !' });
+        return;
+      }
+  
+      res.status(200).json(eventData);
+    } catch (err) {
+      res.status(500).json(err);
+    } 
+  });
+
+router.put('/:id', withAuth, async (req, res) => {
   try {
-    const user = await User.findOne({
-      where: {
-        username: req.body.username,
-      },
+    const [affectedRows] = await Event.update(req.body, {
+      // TODO: SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
+      
     });
 
-    if (!user) {
-      res.status(400).json({ message: "No user account found!" });
-      return;
+    if (affectedRows > 0) {
+      res.status(200).end();
+    } else {
+      res.status(404).end();
     }
-
-    const validPassword = user.checkPassword(req.body.password);
-
-    if (!validPassword) {
-      res.status(400).json({ message: "No user account found!" });
-      return;
-    }
-
-    req.session.save(() => {
-      // TODO: SET USERID IN REQUEST SESSION TO ID RETURNED FROM DATABASE
-
-      // TODO: SET USERNAME IN REQUEST SESSION TO USERNAME RETURNED FROM DATABASE
-
-      // TODO: SET LOGGEDIN TO TRUE IN REQUEST SESSION
-
-      res.json({ user, message: "You are now logged in!" });
-    });
   } catch (err) {
-    res.status(400).json({ message: "No user account found!" });
+    res.status(500).json(err);
   }
 });
 
-router.post("/logout", (req, res) => {
-  if (req.session.loggedIn) {
-    req.session.destroy(() => {
-      res.status(204).end();
+router.delete('/:id', withAuth, async (req, res) => {
+  try {
+    const [affectedRows] = Event.destroy({
+      // TODO: SET ID TO ID PARAMETER INSIDE WHERE CLAUSE CONDITION FIELD
+      where: {
+        id: req.params.id,
+        user_id: req.session.user_id,
+      },
     });
-  } else {
-    res.status(404).end();
+
+    if (affectedRows > 0) {
+      res.status(200).end();
+    } else {
+      res.status(404).end();
+    }
+  } catch (err) {
+    res.status(500).json(err);
   }
 });
 
