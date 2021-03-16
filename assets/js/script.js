@@ -1,4 +1,4 @@
-var joeKey = config.JOE_KEY;
+var BITKey = config.BIT_KEY;
 var myKey = config.MY_KEY;
 var resultTextEl = document.querySelector("#result-text");
 var resultContentEl = document.querySelector("#result-content");
@@ -88,8 +88,6 @@ function printResults(resultObj) {
   directionsBtn.classList.add("btn", "btn-dark");
   directionsBtn.setAttribute("target", "_blank");
 
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl, directionsBtn);
-
   resultContentEl.append(resultCard);
   console.log(resultObj.venue.longitude);
 
@@ -112,14 +110,39 @@ function printResults(resultObj) {
       "_blank"
     );
   }
-}
+
+  var rsvpBtn = document.createElement("a");
+  rsvpBtn.textContent = "~*~ RSVP ~*~";
+  //send event information to user's database
+  // rsvpBtn.setAttribute("href", resultObj.url);
+  rsvpBtn.classList.add("btn", "btn-dark");
+
+  var addArtistBtn = document.createElement("a");
+  addArtistBtn.textContent = "Add to My Artists";
+  //add to user db for saved artists
+  addArtistBtn.classList.add("btn", "btn-dark");
+
+  resultBody.append(
+    titleEl,
+    bodyContentEl,
+    linkButtonEl,
+    directionsBtn,
+    rsvpBtn,
+    addArtistBtn
+  );
+};
+
+function loginRegisterReturn() {
+  alert("You must be logged in to do that");
+
+} 
 
 function searchApi(query) {
   artistCard.innerHTML = "";
 
   var locQueryUrl = "https://rest.bandsintown.com/v4/artists/";
 
-  locQueryUrl = locQueryUrl + query + "/events/?app_id=" + joeKey;
+  locQueryUrl = locQueryUrl + query + "/events/?app_id=" + BITKey;
 
   fetch(locQueryUrl)
     .then(function (response) {

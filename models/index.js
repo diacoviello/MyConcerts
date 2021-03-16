@@ -1,4 +1,6 @@
 const User = require("./User");
+const Event = require("./Event");
+
 
 const Concerts = require("./Concerts");
 // const Location = require("./Location");
@@ -24,4 +26,8 @@ Concerts.belongsToMany(Location, {
 //   as: " ",
 // });
 
-module.exports = { Concerts, Location, User };
+
+module.exports = {
+  User,
+  Event,
+};
