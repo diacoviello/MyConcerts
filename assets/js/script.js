@@ -117,12 +117,18 @@ function printResults(resultObj) {
   // rsvpBtn.setAttribute("href", resultObj.url);
   rsvpBtn.classList.add("btn", "btn-dark");
 
+  var addArtistBtn = document.createElement("a");
+  addArtistBtn.textContent = "Add to My Artists";
+  //add to user db for saved artists
+  addArtistBtn.classList.add("btn", "btn-dark");
+
   resultBody.append(
     titleEl,
     bodyContentEl,
     linkButtonEl,
     directionsBtn,
-    rsvpBtn
+    rsvpBtn,
+    addArtistBtn
   );
 };
 
